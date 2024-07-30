@@ -16,6 +16,7 @@ import { TextArea } from "@/components/textArea";
 //icons
 import { FaShare } from "react-icons/fa";
 import { LuTrash } from "react-icons/lu";
+import { alertError, alertSuccess } from "@/utils/alerts";
 
 interface dashboardProps {
     user:{
@@ -70,7 +71,7 @@ export default function Dashboard({ user }: dashboardProps ) {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        if (input === '') return;
+        if (input === '') return alertError('A tarefa não pode esta vazia');
 
         try{
             //addDoc é uma função do firebase que adiciona um documento a uma coleção criando ja um ID Junto
@@ -83,7 +84,7 @@ export default function Dashboard({ user }: dashboardProps ) {
 
             setInput("");
             setTaskPublic(false);
-
+            alertSuccess('Tarefa registrada')
         }catch(err){
             console.error(err);
         }
@@ -91,21 +92,24 @@ export default function Dashboard({ user }: dashboardProps ) {
 
     const handleShare = async (id: string) =>{
         await navigator.clipboard.writeText(`${window.location.origin}/task/${id}`);
+        alertSuccess('URL da tarefa copiada para área de transferência')
+
     }
 
     const handleDelete = async (id: string) => {
         const ref = doc(db, "tasks", id);
         await deleteDoc(ref);
+        alertSuccess('Tarefa deletada')
+
     }
-
-
+    
     return(
         <>
             <Head>
                 <title>Painel</title>
             </Head>
             
-            <main className="w-full h-screenWithHeader">
+            <main className="w-full h-screenWithHeader ">
                 <section className="bg-zinc-900">
                     <form onSubmit={handleSubmit} className="centralize py-16">
                         <TextArea 
@@ -138,6 +142,11 @@ export default function Dashboard({ user }: dashboardProps ) {
                 <section className="w-full centralize py-16">
                     <h2 className="text-center font-bold text-4xl">Minhas tarefas</h2>
 
+                    {tasks.length === 0 && (
+                        <p className="py-10 text-center">Nenhuma tarefa registrada...</p>
+                    )}
+
+
                     <ul>
                         {tasks.map(task => (
                             <li key={task.id} className="flex justify-between items-center p-4 rounded-lg mt-4 border border-zinc-600">
@@ -165,7 +174,6 @@ export default function Dashboard({ user }: dashboardProps ) {
                     </ul>
                 </section>
             </main>
-            
         </>
     )
 }

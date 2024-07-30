@@ -1,5 +1,6 @@
 import { TextArea } from "@/components/textArea";
 import { db } from "@/services/firebaseConnection";
+import { alertError, alertSuccess } from "@/utils/alerts";
 import { doc, getDoc, collection, query, where, addDoc, getDocs, deleteDoc} from "firebase/firestore";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
@@ -34,7 +35,7 @@ export default function Task({ item, allComments }:TaskProp){
     const handleSubmit = async(e: FormEvent) =>{
         e.preventDefault()
 
-        if (input === '') return;
+        if (input === '') return alertError('O comentário não pode esta vazio');
         if (!session?.user?.email || !session?.user.name) return;
 
         try {
@@ -55,6 +56,7 @@ export default function Task({ item, allComments }:TaskProp){
 
             setComments((old) => [...old, data])
             setInput('')
+            alertSuccess('Comentário registrado com sucesso')
         } catch (err) {
             console.error(err);
         }
@@ -67,7 +69,7 @@ export default function Task({ item, allComments }:TaskProp){
 
             const deleteComment = comments.filter((comment) => comment.id !== id)
             setComments(deleteComment)
-
+            alertSuccess('Comentário deletado com sucesso')
         } catch (err) {
             console.error(err);
         }
