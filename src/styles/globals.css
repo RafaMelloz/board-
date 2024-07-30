@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html, body{
+  height: 100%;
+}
+
+::-webkit-scrollbar{
+  width: 8px;
+}
+
+::-webkit-scrollbar-track{
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  @apply bg-zinc-800 rounded  
+}
+
+body{
+  @apply bg-zinc-200/80
+}
+
+.centralize{
+  @apply max-w-7xl w-full mx-auto xl:px-0 px-10
+}
+
+
