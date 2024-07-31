@@ -6,7 +6,7 @@ export function Header(){
     const { data: session, status } = useSession();
 
     return (
-        <header className="w-full h-20 bg-zinc-900">
+        <header className="w-full min-h-20 bg-zinc-900">
             <nav className="max-w-7xl px-10 xl:px-0 h-full w-full m-auto flex flex-col gap-4 sm:gap-0 sm:flex-row justify-between items-center">
                 <Link href={'/'} className="text-2xl text-white font-semibold">
                     <h1>Board<span className="text-sky-500 font-black text-3xl">+</span></h1>
